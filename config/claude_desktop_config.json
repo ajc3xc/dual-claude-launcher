@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "desktop-commander": {
+      "command": "npx",
+      "args": ["-y", "@wonderwhy-er/desktop-commander@latest"]
+    },
+    "desktop-commander-2": {
+      "command": "npx",
+      "args": ["-y", "@wonderwhy-er/desktop-commander@latest"]
+    },
+    "officemcp": {
+      "command": "C:\\Users\\YOUR_USERNAME\\.local\\bin\\uvx.exe",
+      "args": ["officemcp"]
+    }
+  },
+  "preferences": {
+    "coworkScheduledTasksEnabled": true,
+    "ccdScheduledTasksEnabled": true,
+    "sidebarMode": "chat",
+    "bypassPermissionsModeEnabled": true,
+    "coworkWebSearchEnabled": true
+  }
+}
