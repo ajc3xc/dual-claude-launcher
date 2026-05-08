@@ -113,3 +113,24 @@ dual-claude-launcher/
     ├── sync-shortcuts.ps1            # Fix shortcuts after Claude update
     └── sync-config.ps1              # Push config changes to Instance 2
 ```
+
+## Known Issues
+
+### "Claude for Windows" onboarding popup appears occasionally
+The MSIX Claude install registers itself as the handler for `claude://` OAuth redirect URIs. When Instance 2 is running and any auth event fires, the OS sometimes prompts the main instance to handle it, briefly showing the onboarding/welcome screen. **Just close it — it does not affect either instance.** Cosmetic only, no fix currently.
+
+### Shortcuts break after Claude updates
+MSIX auto-updates change the version folder (e.g. `Claude_1.5354.0.0` → `Claude_1.6608.0.0`), breaking hardcoded shortcut paths. Run `scripts\sync-shortcuts.ps1` after any update to auto-fix.
+
+## Repo Structure
+
+```
+dual-claude-launcher/
+├── README.md
+├── config/
+│   └── claude_desktop_config.json    # MCP config template
+└── scripts/
+    ├── setup.ps1                     # First-time setup
+    ├── sync-shortcuts.ps1            # Fix shortcuts after Claude update
+    └── sync-config.ps1              # Push config changes to Instance 2
+```
