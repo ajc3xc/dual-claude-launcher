@@ -37,13 +37,10 @@ Get-Process | Where-Object {$_.Name -like "*claude*"} | Select-Object -First 1 -
 New-Item -ItemType Directory -Path "$env:APPDATA\Claude-Instance2" -Force
 ```
 
-### 3. Copy the config
+### 3. Review the config templates
 
-```powershell
-Copy-Item config\claude_desktop_config.json "$env:APPDATA\Claude-Instance2\claude_desktop_config.json"
-```
-
-Edit the config to set your correct `uvx.exe` path for OfficeMCP.
+- `config\claude_desktop_config.instance1.json` — Instance 1 (`desktop-commander`). Merge its `mcpServers` block into Instance 1's config manually; setup does not modify it.
+- `config\claude_desktop_config.instance2.json` — Instance 2 (`desktop-commander-2`). `setup.ps1` writes it to `%APPDATA%\Claude-Instance2` and fills in the `uvx.exe` path for OfficeMCP.
 
 ### 4. Run the setup script
 
@@ -52,9 +49,9 @@ Edit the config to set your correct `uvx.exe` path for OfficeMCP.
 ```
 
 This will:
-- Auto-detect the current Claude exe path
+- Auto-detect the current Claude exe path (or pass `-ClaudeExe <path>`)
+- Write the Instance 2 config (an existing one is kept; `-Force` replaces it after a backup)
 - Create desktop shortcuts for Instance 1 and Instance 2
-- Sync the config to Instance 2
 
 ## Maintenance
 
@@ -70,12 +67,15 @@ This will:
 .\scripts\sync-config.ps1
 ```
 
+Copies Instance 1's `mcpServers` to Instance 2, renaming `desktop-commander` to `desktop-commander-2`. Instance 2 `preferences` are kept and the previous config is backed up.
+
 ## MCP Config
 
-See `config\claude_desktop_config.json` for the full config template including:
-- `desktop-commander` — Instance 1's MCP server
-- `desktop-commander-2` — Instance 2's MCP server  
-- `officemcp` — Office automation via uvx
+Each instance has its own template so it only loads its own Desktop Commander server:
+- `claude_desktop_config.instance1.json` — `desktop-commander` + `officemcp`
+- `claude_desktop_config.instance2.json` — `desktop-commander-2` + `officemcp`
+
+Desktop Commander is pinned (`@0.2.52`) rather than `@latest`; bump it deliberately.
 
 ## Parallel Execution Convention
 
@@ -107,8 +107,10 @@ Check both files — you'll see interleaved timestamps proving true concurrency.
 dual-claude-launcher/
 ├── README.md
 ├── config/
-│   └── claude_desktop_config.json    # MCP config template
+│   ├── claude_desktop_config.instance1.json  # Instance 1 MCP config template
+│   └── claude_desktop_config.instance2.json  # Instance 2 MCP config template
 └── scripts/
+    ├── common.ps1                    # Shared helpers (dot-sourced)
     ├── setup.ps1                     # First-time setup
     ├── sync-shortcuts.ps1            # Fix shortcuts after Claude update
     └── sync-config.ps1              # Push config changes to Instance 2
@@ -128,8 +130,10 @@ MSIX auto-updates change the version folder (e.g. `Claude_1.5354.0.0` → `Claud
 dual-claude-launcher/
 ├── README.md
 ├── config/
-│   └── claude_desktop_config.json    # MCP config template
+│   ├── claude_desktop_config.instance1.json  # Instance 1 MCP config template
+│   └── claude_desktop_config.instance2.json  # Instance 2 MCP config template
 └── scripts/
+    ├── common.ps1                    # Shared helpers (dot-sourced)
     ├── setup.ps1                     # First-time setup
     ├── sync-shortcuts.ps1            # Fix shortcuts after Claude update
     └── sync-config.ps1              # Push config changes to Instance 2

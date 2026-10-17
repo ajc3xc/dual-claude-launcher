@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "desktop-commander": {
+      "command": "npx",
+      "args": ["-y", "@wonderwhy-er/desktop-commander@0.2.52"]
+    },
+    "officemcp": {
+      "command": "C:\\Users\\YOUR_USERNAME\\.local\\bin\\uvx.exe",
+      "args": ["officemcp"]
+    }
+  }
+}
